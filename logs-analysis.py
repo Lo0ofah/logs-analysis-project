@@ -22,5 +22,16 @@ firstQuery = """select title, count(*) as numberOfView
                 limit 3;
             """
 
+secondQuery = """select name , count(*) as numberOfView
+                 from authors, articles, log
+                 where authors.id = articles.author
+                 and articles.slug = substring(log.path, 10)
+                 group by  authors.name
+                 order by numberOfView desc;
+              """
+
 print(Question[0])
 print(executeQuery(firstQuery))
+
+print(Question[1])
+print(executeQuery(secondQuery))
