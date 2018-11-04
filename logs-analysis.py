@@ -6,14 +6,6 @@ Question = ["What are the most popular three articles of all time?",
            "On which days did more than 1% of requests lead to errors?"
           ]
 
-def executeQuery(query):
-    db = psycopg2.connect(database=DBName)
-    c = db.cursor()
-    c.execute(query)
-    result = c.fetchall()
-    db.close()
-    return result
-
 firstQuery = """select title, count(*) as numberOfView
                 from articles,log
                 where articles.slug = substring(log.path, 10)
@@ -26,12 +18,33 @@ secondQuery = """select name , count(*) as numberOfView
                  from authors, articles, log
                  where authors.id = articles.author
                  and articles.slug = substring(log.path, 10)
-                 group by  authors.name
+                 group by authors.name
                  order by numberOfView desc;
               """
 
+def executeQuery(query):
+    db = psycopg2.connect(database=DBName)
+    c = db.cursor()
+    c.execute(query)
+    result = c.fetchall()
+    db.close()
+    return result
+
+def formatFirstQuery(result):
+    for title , numberOfView in result:
+        print("\"{}\" _ {} views".format( title , numberOfView))
+    print("\n")
+
+def formatSecondQuery(result):
+    for name , numberOfView in result:
+        print("{} _ {} views".format( name , numberOfView))
+    print("\n")
+
+print("\n")
 print(Question[0])
-print(executeQuery(firstQuery))
+resultFirstQuery = executeQuery(firstQuery)
+formatFirstQuery(resultFirstQuery)
 
 print(Question[1])
-print(executeQuery(secondQuery))
+resultSecondQuery = executeQuery(secondQuery)
+formatSecondQuery(resultSecondQuery)
