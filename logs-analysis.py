@@ -21,6 +21,17 @@ secondQuery = """select name , count(*) as numberOfView
                  group by authors.name
                  order by numberOfView desc;
               """
+thirdQuery ="""select day , failurePercent
+               from
+               (select allRequest.day, allFailuerRequest.error::double precision/allRequest.request::double precision  * 100  as failurePercent
+               from allRequest , allFailuerRequest
+               where allRequest.day = allFailuerRequest.day
+               ) as failurePercentage
+               where failurePercent > 1 ;
+            """
+
+
+
 
 def executeQuery(query):
     db = psycopg2.connect(database=DBName)
@@ -40,6 +51,11 @@ def formatSecondQuery(result):
         print("{} _ {} views".format( name , numberOfView))
     print("\n")
 
+def formatThirdQuery(result):
+    for day , failurePercent in result:
+        print("{0:%B %d,%Y} _ {1:.1f} % errors".format( day , round(failurePercent,1)))
+    print("\n")
+
 print("\n")
 print(Question[0])
 resultFirstQuery = executeQuery(firstQuery)
@@ -48,3 +64,7 @@ formatFirstQuery(resultFirstQuery)
 print(Question[1])
 resultSecondQuery = executeQuery(secondQuery)
 formatSecondQuery(resultSecondQuery)
+
+print(Question[2])
+resultThirdQuery = executeQuery(thirdQuery)
+formatThirdQuery(resultThirdQuery)
