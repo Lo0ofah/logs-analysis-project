@@ -1,6 +1,7 @@
 # Logs Analysis Project
 Logs Analysis is a project for udacity Full stack Nanodegree course  
-It is about building a report tool from a large database by summarizing the data.
+It is about building a report tool from a large database by summarizing the data
+The database is a PostgreSQL database for a fictional news website.
 
 ## Technologies used
 * Python
@@ -8,14 +9,14 @@ It is about building a report tool from a large database by summarizing the data
 * Linux virtual machine
 
 ## System Setup Required
-* Dawnload and install [vagrant](https://www.vagrantup.com/)
-* Dawnload and install [virtualBox](https://www.virtualbox.org/)
+* Download and install [vagrant](https://www.vagrantup.com/)
+* Download and install [virtualBox](https://www.virtualbox.org/)
 
 ## Virtual Machine Setup
 * Clone [FSND VM](https://github.com/udacity/fullstack-nanodegree-vm) it contain the vagrant setup
 * Open terminal and enter to the vagrant folder that you just clone it then run these command
  * vagrant up
- * vagrent ssh
+ * vagrant ssh
  * cd /vagrant
 
 ## Run The Project
@@ -23,6 +24,7 @@ It is about building a report tool from a large database by summarizing the data
 * Add this project inside vagrant folder
 * Open Virtual Machine
 * To create the database download and unzip newsdata.zip then run  psql -d news -f in the terminal
+* create the view listed below
 * To run the python file python logs.analysis.py
 
 ## App's functionality
@@ -34,19 +36,19 @@ Make a report using database to answer three Question
 ## Created Views
 ##### allRequest
 ```SQL
-create view allRequest as
-select time ::date as day, count(*) as request
-from log
-group by day
-order by day;
+CREATE VIEW allRequest AS
+SELECT time ::date AS day, count(*) AS request
+FROM log
+GROUP BY day
+ORDER BY day;
 ```
 ##### allFailuerRequest  
 ```SQL
-create view allFailuerRequest as
-select time ::date as day, count(*) as error
-from log
-where status = '404 NOT FOUND'
-group by day
-order by day;
+CREATE VIEW allFailuerRequest AS
+SELECT time ::date AS day, count(*) AS error
+FROM log
+WHERE status = '404 NOT FOUND'
+GROUP BY day
+ORDER BY day;
 
 ```
